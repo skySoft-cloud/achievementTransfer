@@ -1,0 +1,63 @@
+@import "variables";
+.df{
+  display: flex;
+  flex-direction: row;
+}
+.flex-column{
+  display: flex;
+  flex-direction: column;
+}
+.align-center{
+  align-items: center;
+}
+.space-between{
+  justify-content: space-between;
+}
+.flex-c-c{
+  @extend .df;
+  @extend .align-center;
+  justify-content: center;
+}
+.flex-sb{
+  @extend .df;
+  @extend .align-center;
+  @extend .space-between;
+}
+.active {
+  color: $main-color;
+}
+.active-hover-color{
+  cursor: pointer;
+  color: $main-color;
+}
+.active-bg-color{
+  background: $main-color;
+}
+.medium-button{
+  width: 184px;
+  height: 60px;
+  @extend .font20;
+}
+.img-logo{
+  width: 328px;
+  height: 34px;
+  vertical-align: middle;
+}
+.header-container {
+  .top-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0 24px 0;
+  }
+
+  .bread-list {
+    width: 1240px;
+    margin: 0 auto;
+  }
+}
+.text-ellipsis{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

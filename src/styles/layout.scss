@@ -1,0 +1,49 @@
+@import "variables";
+@import "extend";
+.el-header {
+  font-size: 16px;
+  .banner {
+    height: 282px;
+  }
+}
+.header-top{
+  @extend .w1240;
+  @extend .font16;
+  padding: 16px 0;
+  color: $text-color-grey;
+}
+.header-top-right{
+  span:hover{
+    @extend .active-hover-color;
+  }
+}
+.header-nav{
+  @extend .w1240;
+  padding: 28px 0;
+  &-logo{
+    img{
+      @extend .img-logo;
+    }
+  }
+  .header-nav-item:hover{
+    @extend .active-hover-color
+  }
+}
+
+.footer-container{
+  @extend .w1240;
+  @extend .df;
+  @extend .space-between;
+  @extend .font20;
+  color: $color-light;
+  div {
+    line-height: 2.5;
+  }
+}
+.help-list{
+  span{
+    &:hover{
+      @extend .active-hover-color;
+    }
+  }
+}
