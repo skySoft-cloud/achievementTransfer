@@ -5,20 +5,20 @@
          :key="index"
          @click="clickItem(listItem)">
       <div class="top-content">
-        <img :src="listItem.poster"
+        <img :src="listItem.trademarkImgs"
              alt="">
       </div>
       <div class="bottom-content">
         <div class="title">{{ listItem.title }}</div>
-        <div class="city-desc">{{ listItem.city }}/{{ listItem.major }}</div>
+        <div class="city-desc">{{ listItem.city }}/{{ listItem.appRange }}</div>
         <div class="bottom-content-info">
           <div>
             <i class="el-icon-date"></i>
-            <span>{{ listItem.date }}</span>
+            <span>{{ listItem.createTime }}</span>
           </div>
           <div>
             <i class="el-icon-view"></i>
-            <span>{{ listItem.readers }}人浏览</span>
+            <span>{{ listItem.seeNum }}人浏览</span>
           </div>
         </div>
       </div>

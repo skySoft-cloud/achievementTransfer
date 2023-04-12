@@ -245,7 +245,7 @@ export default {
         this.searchOptions,
         { pageNo: this.pageNo, pageSize: this.pageSize });
       console.log("查询条件：", options);
-      getRequirementList({ data: options }).then(res => {
+      getRequirementList( options ).then(res => {
       }).catch(err => {
       });
     },

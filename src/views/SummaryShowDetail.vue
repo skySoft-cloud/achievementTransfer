@@ -11,7 +11,7 @@
           </div>
         </div>
       <el-divider class="top-divider"></el-divider>
-      <summary-detail-profile></summary-detail-profile>
+      <summary-detail-profile :info="summaryInfo"></summary-detail-profile>
       <div class="policy-content">
         <el-tabs
           class="w1240"
@@ -19,7 +19,7 @@
                  @tab-click="handleClick">
           <el-tab-pane label="成果内容"
                        name="summaryDetail">
-         <summary-detail-desc></summary-detail-desc>
+         <summary-detail-desc :info="summaryInfo"></summary-detail-desc>
           </el-tab-pane>
           <el-tab-pane label="研发团队"
                        name="developTeam">
@@ -65,6 +65,7 @@ import DevelopTeam from "@/components/DevelopTeam";
 import CompetitionAnalysis from "@/components/CompetitionAnalysis";
 import ApplyZone from "@/components/ApplyZone";
 import ProfessionComment from "@/components/ProfessionComment";
+import { getSummaryDetail } from '@/api/apiFunc'
 export default {
   name: "summaryShowDetail",
   components: { ProfessionComment, ApplyZone, CompetitionAnalysis, DevelopTeam, SummaryIdea, SummaryDetailProfile, AttachFilesList, SummaryDetailDesc, ContentHeader },
@@ -72,6 +73,7 @@ export default {
     return {
       activeName: "summaryDetail",
       attachName: "attachDownload",
+      summaryInfo: {}
     };
   },
   mounted () {
@@ -80,6 +82,11 @@ export default {
   methods: {
     getDetail () {
       console.log(this.$route.query.id);
+      getSummaryDetail(this.$route.query.id).then(res=>{
+        console.log(res)
+      }).catch(err=>{
+        console.log(err)
+      })
     },
     handleClick (tab) {
       this.activeName = tab.name

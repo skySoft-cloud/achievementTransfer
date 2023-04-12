@@ -46,6 +46,9 @@ export default {
       }
     }
   },
+  mounted () {
+    console.log(this)
+  },
   methods: {
     goLogin() {
       this.$router.push({name: 'PublishResult'})

@@ -1,11 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import LayOut from "../views/LayOut.vue";
-import LoginPage from "../views/LoginPage.vue";
-import TheIndex from "../views/TheIndex.vue"
+import LayOut from "@/views/LayOut.vue";
+import LoginPage from "@/views/LoginPage.vue";
+import TheIndex from "@/views/TheIndex.vue"
 import ResultGallery from "@/views/ResultGallery";
-import CooperationRequirement from "../views/CooperationRequirement"
-import SummaryShow from "../views/SummaryShow"
+import CooperationRequirement from "@/views/CooperationRequirement"
+import SummaryShow from "@/views/SummaryShow"
 import PublishResult from "@/views/PublishResult";
 import ActiveNews from "@/views/ActiveNews";
 import ServiceConstructor from "@/views/ServiceConstructor";
@@ -20,12 +20,29 @@ import HelpCenter from "@/views/HelpCenter.vue";
 import SummaryShowDetail from "@/views/SummaryShowDetail.vue";
 import RequirementShowDetail from "@/views/RequirementShowDetail";
 import PublishRequirement from "@/views/PublishRequirement";
+import UserRegister from '@/views/UserRegister'
+import UserCenter from '@/views/UserCenter'
 
 
 Vue.use(VueRouter);
+// 获取原型对象push函数
+const originalPush = VueRouter.prototype.push
+
+// 获取原型对象replace函数
+const originalReplace = VueRouter.prototype.replace
+
+// 修改原型对象中的push函数
+VueRouter.prototype.push = function push(location){
+  return originalPush.call(this , location).catch(err=>err)
+}
+
+// 修改原型对象中的replace函数
+VueRouter.prototype.replace = function replace(location){
+  return originalReplace.call(this , location).catch(err=>err)
+}
+
 
 const routes = [
-
   {
     path: "/",
     redirect: '/index',
@@ -115,6 +132,11 @@ const routes = [
         path: "/professional-pool",
         name: "ProfessionalDetail",
         component: ProfessionalDetail,
+      },
+      {
+        path: "/user-center",
+        name: "UserCenter",
+        component: UserCenter,
       }
     ],
   },
@@ -127,6 +149,11 @@ const routes = [
     path: "/user-login",
     name: "UserLoginPage",
     component: UserLoginPage
+  },
+  {
+    path: "/user-register",
+    name: "UserRegister",
+    component: UserRegister
   }
 ];
 

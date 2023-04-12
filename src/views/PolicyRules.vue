@@ -12,7 +12,7 @@
             <div class="search-bar">
               <el-input
                 suffix-icon="el-icon-search"
-                v-model="searchOptions.content"
+                v-model="searchOptions.title"
                 placeholder="请输入法规政策名称"
               >
               </el-input>
@@ -22,26 +22,26 @@
       </div>
       <div class="policy-content w1240">
         <div class="left-nav">
-          <div @click="currentNav = 'all'"
-               :class="currentNav === 'all' ? 'is-active' : ''">
+          <div @click="currentNav = ''"
+               :class="currentNav === '' ? 'is-active' : ''">
             <img src="../assets/images/p1.png"
                  alt="">
             <span>全部政策</span>
           </div>
-          <div @click="currentNav = 'country'"
-               :class="currentNav === 'country' ? 'is-active' : ''">
+          <div @click="currentNav = '1'"
+               :class="currentNav === '1' ? 'is-active' : ''">
             <img src="../assets/images/p2.png"
                  alt="">
             <span>国家政策</span>
           </div>
-          <div @click="currentNav = 'place'"
-               :class="currentNav === 'place' ? 'is-active' : ''">
+          <div @click="currentNav = '2'"
+               :class="currentNav === '2' ? 'is-active' : ''">
             <img src="../assets/images/p3.png"
                  alt="">
             <span>地方政策</span>
           </div>
-          <div @click="currentNav = 'trade'"
-               :class="currentNav === 'trade' ? 'is-active' : ''">
+          <div @click="currentNav = '3'"
+               :class="currentNav === '3' ? 'is-active' : ''">
             <img src="../assets/images/p3.png"
                  alt="">
             <span>行业政策</span>
@@ -117,8 +117,7 @@
 </template>
 
 <script>
-import { getPolicyList } from '@/api/apiFunc'
-
+import { getDictByDicCode, getPolicyList } from '@/api/apiFunc'
 export default {
   name: "PolicyRules",
   data () {
@@ -128,14 +127,14 @@ export default {
       pageSize: 12,
       total: 0,
       policyTitles: {
-        all: '全部政策',
-        country: '国家政策',
-        place: '地方政策',
-        trade: '行业政策'
+        '': '全部政策',
+        '1': '国家政策',
+        '2': '地方政策',
+        '3': '行业政策'
       },
-      currentNav: "all",
+      currentNav: "",
       searchOptions: {
-        content: ''
+        title: ''
       },
     };
   },
@@ -146,11 +145,14 @@ export default {
   },
   watch: {
     currentNav:function(val){
-      console.log(val);
       this.pageNo = 1;
+      this.getListData()
     }
   },
   mounted () {
+    getDictByDicCode('help_type').then(res=>{
+
+    })
     this.getListData()
   },
   methods: {
@@ -158,7 +160,7 @@ export default {
       let options = Object.assign(
         {},
         this.searchOptions,
-        { pageNo: this.pageNo, pageSize: this.pageSize });
+        { pageNo: this.pageNo, pageSize: this.pageSize,type: this.currentNav });
       getPolicyList(options).then(res=>{
         console.log(res)
       })

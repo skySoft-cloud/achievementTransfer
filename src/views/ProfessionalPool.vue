@@ -162,7 +162,8 @@ export default {
         this.searchOptions,
         { pageNo: this.pageNo, pageSize: this.pageSize });
       console.log("查询条件：", options);
-      getProfessionalList({ data: options }).then(res => {
+      getProfessionalList( options).then(res => {
+        console.log(res.data.result.records)
         // this.listData = res.data.result.records
       }).catch(err => {
         console.log(err);

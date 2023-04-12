@@ -12,7 +12,7 @@
               clearable
               placeholder="请输入成果名称"
               suffix-icon="el-icon-search"
-              v-model="searchOptions.content"
+              v-model="searchOptions.title"
             >
             </el-input>
             <el-button type="primary"
@@ -26,33 +26,33 @@
             <div class="nav-bar-content__left">
               <span class="title">行业分类</span>
               <div class="nav-item">
-                <span v-for="(classItem) in navIndustry"
-                      @click="searchOptions.belongClassification=classItem.id"
-                      :class="searchOptions.belongClassification === classItem.id ?  'active-bg' : ''"
-                      :key="classItem.id">
+                <span v-for="(classItem) in tradeTypes"
+                      @click="searchOptions.belongClassification=classItem.value"
+                      :class="searchOptions.belongClassification === classItem.value ?  'active-bg' : ''"
+                      :key="classItem.value">
                   {{ classItem.label }}
                 </span>
               </div>
             </div>
-            <div class="active mr30">
-              更多
-            </div>
+<!--            <div class="active mr30">-->
+<!--              更多-->
+<!--            </div>-->
           </div>
           <div class="nav-bar-content">
             <div class="nav-bar-content__left">
               <span class="title">所属区域</span>
               <div class="nav-item">
-                  <span v-for="(areaItem) in navArea"
-                        @click="searchOptions.belongArea=areaItem.id"
-                        :class="searchOptions.belongArea === areaItem.id ?  'active-bg' : ''"
-                        :key="areaItem.id">
+                  <span v-for="(areaItem) in citys"
+                        @click="searchOptions.belongArea=areaItem.value"
+                        :class="searchOptions.belongArea === areaItem.value ?  'active-bg' : ''"
+                        :key="areaItem.value">
                   {{ areaItem.label }}
                 </span>
               </div>
             </div>
-            <div class="active mr30">
-              更多
-            </div>
+<!--            <div class="active mr30">-->
+<!--              更多-->
+<!--            </div>-->
           </div>
         </div>
       </div>
@@ -78,188 +78,178 @@
 </template>
 
 <script>
-import CardItem from "@/components/CardItem";
-import { getSummaryList } from "@/api/apiFunc";
+import CardItem from '@/components/CardItem'
+import { getDictByDicCode, getSummaryList } from '@/api/apiFunc'
+import { dictionary } from '@/dictionary/dictionary'
 
 export default {
-  name: "SummaryShow",
+  name: 'SummaryShow',
   components: { CardItem },
-  mounted () {
-    this.getPageList();
-  },
   data () {
     return {
       searchOptions: {
-        content: "",
-        belongClassification: "0",
-        belongArea: "0"
+        title: '',
+        belongClassification: '',
+        belongArea: ''
       },
+      citys: [],
+      tradeTypes: [],
       pageNo: 1,
       pageSize: 12,
       total: 100,
-      routeName: "SummaryShowDetail",
-      navIndustry: [
-        { label: "不限", id: "0" },
-        { label: "能源电力", id: "1" },
-        { label: "环境工程", id: "2" },
-        { label: "化学化工", id: "3" },
-        { label: "先进材料", id: "4" },
-        { label: "生物医药", id: "5" },
-        { label: "电子信息", id: "6" },
-        { label: "智能制造", id: "7" }
-      ],
-      navArea: [
-        { label: "不限", id: "0" },
-        { label: "成都市", id: "1" },
-        { label: "绵阳市", id: "2" },
-        { label: "德阳市", id: "3" },
-        { label: "宜宾市", id: "4" },
-        { label: "泸州市", id: "5" },
-        { label: "南充市", id: "6" },
-        { label: "自贡市", id: "7" },
-        { label: "内江市", id: "8" }
-      ],
+      routeName: 'SummaryShowDetail',
       listData: [
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         },
         {
           id: 1,
-          poster: require("../assets/images/xm.png"),
-          title: "畜牧业物联网数据分析模型",
-          city: "南充市",
-          major: "电子信息",
-          date: "2019-3-11",
-          readers: "321"
+          poster: require('../assets/images/xm.png'),
+          title: '畜牧业物联网数据分析模型',
+          city: '南充市',
+          major: '电子信息',
+          date: '2019-3-11',
+          readers: '321'
         }
       ]
-    };
+    }
   },
   watch: {
     searchOptions: {
-      immediate: true,
+      // immediate: true,
       deep: true,
       handler () {
-        this.searchSummary();
+        this.searchSummary()
       }
     }
+  },
+  mounted () {
+    getDictByDicCode('need_pub_trade_type').then(res => {
+      res.data.unshift({ label: '不限', value: '' })
+      this.tradeTypes = res.data
+    })
+
+    this.citys = dictionary.citys
+    this.getPageList()
   },
   methods: {
     getPageList () {
       let options = Object.assign(
         {},
         this.searchOptions,
-        { pageNo: this.pageNo, pageSize: this.pageSize });
-      console.log("查询条件：", options);
-      getSummaryList({ data: options }).then(res => {
+        { pageNo: this.pageNo, pageSize: this.pageSize })
+      console.log('查询条件：', options)
+      getSummaryList(options).then(res => {
+        console.log(res)
       }).catch(err => {
-      });
+        console.log(err)
+      })
     },
     searchSummary () {
-      this.pageNo = 1;
-      this.getPageList();
+      this.pageNo = 1
+      this.getPageList()
     },
     currentChange () {
-      this.getPageList();
+      this.getPageList()
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -300,17 +290,22 @@ export default {
 
           .nav-item {
             margin-left: 30px;
-            width: 720px;
+            max-width: 1040px;
             color: #000000;
             display: flex;
-            justify-content: space-between;
+            //justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
 
             .active-bg {
               background: #E1660D;
               padding: 6px 12px;
               color: #fff;
               border-radius: 5px;
+            }
+
+            span {
+              margin: 5px 20px 5px 0;
             }
 
             span:not(.active-bg):hover {

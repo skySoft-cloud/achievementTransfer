@@ -4,9 +4,16 @@
       <div class="header-top flex-sb">
         <span>欢迎访问基于大数据科技孵化成果转移转化平台</span>
         <div class="header-top-right">
-          <span @click="goUserLogin">登录</span>
+          <div v-if="!$store.state.isLogin">
+            <span @click="goUserLogin">登录</span>
+            <el-divider direction="vertical"></el-divider>
+            <span @click="goUserRegister">注册</span>
+          </div>
+          <span class="user-icon"><i class="el-icon-user"></i></span>
+          <span v-if="$store.state.isLogin"
+                @click="$router.push({name: 'UserCenter'})">个人中心</span>
           <el-divider direction="vertical"></el-divider>
-          <span>注册</span>
+          <span @click="logout">退出登录</span>
         </div>
       </div>
       <el-divider></el-divider>
@@ -19,8 +26,8 @@
               :class="['header-nav-item',$route.name === 'TheIndex' ? 'active' : '' ]">首页</span>
         <span @click="goRoute('SummaryShow')"
               :class="['header-nav-item',$route.name === 'SummaryShow' ? 'active' : '' ]">成果展示</span>
-<!--        <span :class="['header-nav-item']"-->
-<!--              @click="goLogin">成果评价</span>-->
+        <!--        <span :class="['header-nav-item']"-->
+        <!--              @click="goLogin">成果评价</span>-->
         <span @click="goRoute('CooperationRequirement')"
               :class="['header-nav-item',$route.name === 'CooperationRequirement' ? 'active' : '' ]">合作需求</span>
         <span @click="goRoute('ActiveNews')"
@@ -56,7 +63,8 @@
     <el-footer>
       <div class="footer-container">
         <div style="width: 456px;">
-          <img class="img-logo" src="../assets/images/comlogo.png"
+          <img class="img-logo"
+               src="../assets/images/comlogo.png"
                alt="">
           <div class="df align-center help-list">
             <span>免费服务</span>
@@ -82,34 +90,46 @@
 </template>
 <script>
 export default {
-  name: "LayOut",
+  name: 'LayOut',
   mounted () {
-    console.log(this.$route);
+    console.log(this.$route)
   },
   computed: {
-    showBanner(){
-      let showBannerRouteList = ['TheIndex'];
-      return showBannerRouteList.includes(this.$route.name);
+    showBanner () {
+      let showBannerRouteList = ['TheIndex']
+      return showBannerRouteList.includes(this.$route.name)
     }
   },
   methods: {
-    goUserLogin() {
-      this.$router.replace({ name: "UserLoginPage" });
+    logout() {
+      this.$store.commit('CLEAR_USER_INFO');
+      this.$router.push({name: 'UserLoginPage'})
+    },
+    goUserLogin () {
+      this.$router.replace({ name: 'UserLoginPage' })
+    },
+    goUserRegister () {
+      this.$router.replace({ name: 'UserRegister' })
     },
     goLogin () {
-      this.$router.replace({ name: "LoginPage" });
+      this.$router.replace({ name: 'LoginPage' })
     },
     goRoute (routeName) {
-      this.$router.push({ name: routeName });
+      this.$router.push({ name: routeName })
     }
   }
-};
+}
 </script>
 <style lang="scss">
 @import "@/styles/layout.scss";
-.top-divider{
+
+.top-divider {
   height: 4px !important;
   background: #E7742B !important;
   margin-bottom: 18px !important;
+}
+
+.user-icon {
+  margin-right: 4px;
 }
 </style>

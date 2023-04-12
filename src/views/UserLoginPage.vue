@@ -1,113 +1,169 @@
 <template>
   <div class="user-login-page">
-<!--    <div class="back-home">-->
-<!--      <el-button type="text" @click="goLogin" style="color: #ffffff;font-size: 16px">返回首页</el-button>-->
-<!--    </div>-->
+    <!--    <div class="back-home">-->
+    <!--      <el-button type="text" @click="goLogin" style="color: #ffffff;font-size: 16px">返回首页</el-button>-->
+    <!--    </div>-->
     <div class="login-content">
       <div class="login-form">
         <img src="../assets/images/logo1.png"
-             >
+        >
         <p>基于大数据科技孵化成果转移转化平台</p>
         <div class="form">
           <el-input
             style="margin-bottom: 25px;"
             placeholder="用户名"
             prefix-icon="el-icon-user-solid"
-            v-model="form.name">
+            v-model="form.username">
           </el-input>
           <el-input
-            style="margin-bottom: 45px;"
+            style="margin-bottom: 25px;"
             type="password"
             placeholder="密码"
             prefix-icon="el-icon-key"
-            v-model="form.pwd">
+            v-model="form.password">
           </el-input>
-          <div class="login-button" @click="goLogin">登录</div>
-        </div>
-      </div>
-        <div class="bottom-info">
-          <span>联系我们：四川省自然资源科学研究院（四川省生产力促进中心）  028-68107435  </span>
-          <div class="bottom-info-contact">
-            <span>主办方：成都中企艾维数据有限公司</span>
-            <span>电话：028-65215025</span>
+            <div class="df"  style="margin-bottom: 25px;">
+              <el-input
+                placeholder="输入验证码"
+                prefix-icon="el-icon-key"
+                v-model="form.captcha">
+              </el-input>
+              <img style="cursor:pointer;" :src="captchaUrl"
+                   @click="refreshCaptcha"
+                   alt="验证码">
+            </div>
+          <div class="flex-column">
+            <div class="login-button"
+                 @click="goLogin">登录
+            </div>
+            <div class="register-btn"
+                 @click="$router.push({name: 'UserRegister'})">没有账号？去注册
+            </div>
           </div>
         </div>
+      </div>
+      <div class="bottom-info">
+        <span>联系我们：四川省自然资源科学研究院（四川省生产力促进中心）  028-68107435  </span>
+        <div class="bottom-info-contact">
+          <span>主办方：成都中企艾维数据有限公司</span>
+          <span>电话：028-65215025</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { getVerifyCode, login } from '@/api/apiFunc'
+
 export default {
-  name: "LoginPage",
-  data() {
+  name: 'LoginPage',
+  data () {
     return {
+      captchaUrl: '',
       form: {
-        name: '',
-        pwd: ''
+        username: '',
+        password: '',
+        captcha: ''
       }
     }
   },
+  mounted () {
+    this.refreshCaptcha()
+  },
   methods: {
-    goLogin() {
-      this.$router.push({name: 'TheIndex'})
+    refreshCaptcha () {
+      getVerifyCode().then(res => {
+        this.captchaUrl = res.data.result
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    goLogin () {
+      // this.$router.push({ name: 'TheIndex' })
+      let reqData = {
+        "captcha": this.form.captcha,
+        "checkKey": "abc123456",
+        "password": this.form.password,
+        "username": this.form.username
+      }
+      login(reqData).then(res => {
+        if (res.data.code === 200) {
+          this.$store.commit('SET_USER_INFO',res.data.result)
+          this.$router.push({ name: 'TheIndex' })
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+
     }
   },
-};
+}
 </script>
 <style lang="scss">
-.user-login-page{
-  .back-home{
+.user-login-page {
+  .back-home {
     text-align: right;
     padding-right: 10px;
   }
+
   //width: 100%;
   height: 100%;
   background: url("../assets/images/user-login.png") no-repeat center;
   background-size: cover;
-  .login-content{
+
+  .login-content {
     width: 710px;
     margin: 0 auto;
     padding-top: 46px;
-    .login-form{
+
+    .login-form {
       display: flex;
       flex-direction: column;
       align-items: center;
-      >img{
-        height: 128px;
+
+      > img {
+        height: 64px;
       }
-      >p{
-        font-size: 40px;
+
+      > p {
+        font-size: 30px;
         font-weight: 400;
         color: #FFFFFF;
       }
     }
-    .form{
+
+    .form {
       width: 690px;
       padding: 60px 104px;
       box-sizing: border-box;
       background: url("../assets/images/form-bg.png") no-repeat;
       background-size: cover;
 
-      .login-button{
+      .login-button {
         width: 481px;
         background: #2B8CD7;
-        height: 80px;
-        font-size: 36px;
+        height: 40px;
+        font-size: 14px;
         color: #FFFFFF;
-        line-height: 80px;
+        line-height: 40px;
         text-align: center;
-        &:hover{
+
+        &:hover {
           cursor: pointer;
         }
       }
-      .el-input__inner{
-        height: 80px;
-        font-size: 20px;
+
+      .el-input__inner {
+        height: 40px;
+        font-size: 14px;
       }
-      .el-input__prefix{
+
+      .el-input__prefix {
         font-size: 20px;
       }
     }
-    .bottom-info{
+
+    .bottom-info {
       position: fixed;
       bottom: 0;
       width: 710px;
@@ -116,10 +172,22 @@ export default {
       align-items: center;
       font-size: 16px;
       color: #FFFFFF;
-      .bottom-info-contact{
-          margin-bottom: 15px;
+
+      .bottom-info-contact {
+        margin-bottom: 15px;
         margin-top: 15px;
       }
+    }
+  }
+
+  .register-btn {
+    padding-top: 10px;
+    text-align: right;
+    color: #2B8CD7;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
 }

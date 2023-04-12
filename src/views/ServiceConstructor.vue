@@ -8,64 +8,25 @@
               <el-breadcrumb-item :to="{name:'TheIndex'}">首页</el-breadcrumb-item>
               <el-breadcrumb-item>服务商</el-breadcrumb-item>
             </el-breadcrumb>
-<!--            <div class="search-bar">-->
-<!--              <el-input-->
-<!--                suffix-icon="el-icon-search"-->
-<!--                v-model="value"-->
-<!--              >-->
-<!--              </el-input>-->
-<!--            </div>-->
+            <!--            <div class="search-bar">-->
+            <!--              <el-input-->
+            <!--                suffix-icon="el-icon-search"-->
+            <!--                v-model="value"-->
+            <!--              >-->
+            <!--              </el-input>-->
+            <!--            </div>-->
           </div>
         </div>
       </div>
       <div class="w1240">
-        <div class="service-store" style="margin-top: 40px;">
-          <img src="../assets/images/tianfuxingulogo@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo12@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo4@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/youchen@2x.png"
-               class="service-store-item">
-        </div>
-        <div class="service-store">
-          <img src="../assets/images/work+@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/tengxun@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo13@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo@2x(1).png"
-               class="service-store-item">
-          <img src="../assets/images/yingchuangdongli@2x.png"
-               class="service-store-item">
-        </div>
-        <div class="service-store">
-          <img src="../assets/images/tianfuxingulogo@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo12@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo4@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/youchen@2x.png"
-               class="service-store-item">
-        </div>
-        <div class="service-store" style="margin-bottom: 40px;">
-          <img src="../assets/images/work+@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/tengxun@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo13@2x.png"
-               class="service-store-item">
-          <img src="../assets/images/logo@2x(1).png"
-               class="service-store-item">
-          <img src="../assets/images/yingchuangdongli@2x.png"
-               class="service-store-item">
+        <div class="service-store"
+             style="margin-top: 40px;">
+          <img
+            @click="newWindow(item.url)"
+            v-for="(item,index) in listData"
+            :key="index"
+            :src="(baseUrl + item.logo)"
+            class="service-store-item">
         </div>
       </div>
     </div>
@@ -73,13 +34,38 @@
 </template>
 
 <script>
+import { getConstructorList } from '@/api/apiFunc'
+import { baseUrl } from '@/api/config'
+
 export default {
-  name: "ServiceConstructor"
-};
+  name: 'ServiceConstructor',
+  data () {
+    return {
+      listData: [],
+      baseUrl: baseUrl
+    }
+  },
+  mounted () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      getConstructorList({ pageSize: 999 }).then(res => {
+        this.listData = res?.data?.result?.records || []
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    newWindow (url) {
+      window.open(url, '_blank')
+    },
+  },
+}
 </script>
 
 <style lang="scss">
 .service-constructor {
+  height: calc(100vh - 338px);
   background: #fff;
 
   .header-container {
@@ -202,16 +188,19 @@ export default {
       }
     }
   }
+
   .service-store {
     margin-bottom: 20px;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     .service-store-item {
-      width: 228px;
+      width: 290px;
       height: 100px;
       border: 1px solid #eee;
+      margin-bottom: 14px;
 
       &:hover {
         cursor: pointer;
